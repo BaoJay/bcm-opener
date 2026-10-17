@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "BCM Opener",
+  "version": "1.1.0",
+  "description": "Đọc các dòng 'Hát BCM: ...' trong trang hiện tại và mở tab bookvn.net/newsong tương ứng.",
+  "permissions": ["activeTab", "scripting"],
+  "background": { "service_worker": "background.js" },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Mở bài ca mới (BCM)",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  }
+}

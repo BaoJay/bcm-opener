@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <title>Bài ca mới Opener</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&display=swap"
+    />
+    <style>
+      :root {
+        --green: #03493e;
+        --green-deep: #0f3a32;
+        --gold: #d6b26e;
+        --gold-soft: #e7cf9c;
+        --cream: #f8efdc;
+        --line: rgba(214, 178, 110, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        width: 340px;
+        min-height: 220px;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        background: var(--green);
+        color: var(--cream);
+        font:
+          13px "Lora",
+          Georgia,
+          "Times New Roman",
+          serif;
+      }
+
+      /* Dải trang trí bên trái */
+      .band {
+        background: var(--green-deep);
+        padding: 10px 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* Khung góc khoét cong: 9-slice để giãn theo chiều cao mà góc không méo */
+      .band .slot {
+        flex: 1;
+        min-height: 30px;
+        margin: 0 6px;
+        border: 10px solid transparent;
+        border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M6.6 .6H23.4A6 6 0 0 0 29.4 6.6V23.4A6 6 0 0 0 23.4 29.4H6.6A6 6 0 0 0 .6 23.4V6.6A6 6 0 0 0 6.6 .6Z' fill='none' stroke='%23d6b26e' stroke-width='1.2'/%3E%3C/svg%3E")
+          10 / 10px stretch;
+      }
+      .band .hex {
+        display: block;
+        width: 100%;
+        height: auto;
+        flex: none;
+      }
+
+      /* Viền kem trên + phải, 2 đường chỉ vàng gập góc chữ L */
+      .frame {
+        --g: linear-gradient(var(--gold), var(--gold));
+        display: flex;
+        flex-direction: column;
+        padding: 12px 12px 0 0;
+        background:
+          var(--g) left 0 top 4px / calc(100% - 4px) 1px,
+          var(--g) right 4px top 4px / 1px calc(100% - 4px),
+          var(--g) left 0 top 7px / calc(100% - 7px) 1px,
+          var(--g) right 7px top 7px / 1px calc(100% - 7px),
+          var(--cream);
+        background-repeat: no-repeat;
+      }
+
+      /* Khung xanh + 2 nẹp góc vàng (chữ L, vát 45° hai đầu) */
+      .panel {
+        --arm: 30px;
+        --t: 6px;
+        flex: 1;
+        position: relative;
+        background: var(--green);
+        padding: 15px 15px;
+      }
+      .panel::before,
+      .panel::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        width: var(--arm);
+        height: var(--arm);
+        background: var(--gold);
+        pointer-events: none;
+      }
+      .panel::before {
+        top: 0;
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% 100%,
+          calc(100% - var(--t)) calc(100% - var(--t)),
+          calc(100% - var(--t)) var(--t),
+          var(--t) var(--t)
+        );
+      }
+      .panel::after {
+        bottom: 0;
+        clip-path: polygon(
+          0 100%,
+          100% 100%,
+          100% 0,
+          calc(100% - var(--t)) var(--t),
+          calc(100% - var(--t)) calc(100% - var(--t)),
+          var(--t) calc(100% - var(--t))
+        );
+      }
+
+      h1 {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 0 24px 14px;
+        color: var(--gold);
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--cream);
+      }
+
+      .session {
+        border: 1px solid var(--line);
+        background: rgba(0, 0, 0, 0.12);
+        padding: 8px 10px;
+        margin-bottom: 10px;
+      }
+      .session-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: var(--gold);
+        padding-bottom: 6px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--line);
+      }
+      .session-head::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        flex: none;
+        border: 1px solid var(--gold);
+        transform: rotate(45deg);
+      }
+      .session-head button {
+        margin-left: auto;
+      }
+      .line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 0;
+        border-top: 1px dashed rgba(214, 178, 110, 0.2);
+      }
+      .session-head + .line {
+        border-top: none;
+      }
+      .nums {
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        color: var(--cream);
+      }
+      .time {
+        color: var(--gold-soft);
+        opacity: 0.8;
+        font-size: 12px;
+      }
+      button {
+        cursor: pointer;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        border: 1px solid var(--gold);
+        background: var(--gold);
+        color: var(--green-deep);
+        border-radius: 2px;
+        padding: 3px 10px;
+        transition: background 0.15s;
+      }
+      button:hover {
+        background: var(--gold-soft);
+      }
+      button.secondary {
+        background: transparent;
+        color: var(--gold);
+      }
+      button.secondary:hover {
+        background: rgba(214, 178, 110, 0.15);
+      }
+      .msg {
+        color: var(--gold-soft);
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="band" aria-hidden="true">
+      <div class="slot"></div>
+      <svg class="hex" viewBox="0 0 42 26" fill="none" stroke="#d6b26e" stroke-width="1.2">
+        <path d="M.7 13L10 .6h22L41.3 13 32 25.4H10z" />
+        <path d="M21 6l7 7-7 7-7-7z" />
+      </svg>
+      <div class="slot"></div>
+    </aside>
+    <main class="frame">
+      <div class="panel">
+        <h1>Bài ca mới <em>(BCM)</em> trên trang này</h1>
+        <div id="list"><p class="msg">Đang đọc trang…</p></div>
+      </div>
+    </main>
+    <script src="dev-mock.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
