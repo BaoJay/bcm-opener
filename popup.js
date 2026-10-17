@@ -6,6 +6,14 @@ function grabText() {
   return document.body.innerText;
 }
 
+// Một mục: số bài thường ("12") hoặc phụ lục ("PL1", "PL 1", "phụ lục 1", "Phụ Lục 1")
+const ITEM = String.raw`(?:(?:PL|ph[uụ]\s*l[uụ]c)\s*)?\d+`;
+const ITEM_RE = /((?:PL|ph[uụ]\s*l[uụ]c)\s*)?(\d+)/giu;
+const LINE_RE = new RegExp(
+  String.raw`Hát\s*BCM\s*:?\s*(${ITEM}(?:[\s\-–—,;/]+${ITEM})*)\s*(\(\s*[\d:]+\s*\))?`,
+  "iu",
+);
+
 // Tách các dòng "Hát BCM: ..." theo từng buổi (Sáng / Chiều / Tối)
 function parse(text) {
   const sessions = [];
@@ -23,12 +31,10 @@ function parse(text) {
       continue;
     }
 
-    const m = line.match(
-      /Hát\s*BCM\s*:?\s*([\d\s\-–—,;/]+)(\(\s*[\d:]+\s*\))?/i,
-    );
+    const m = line.match(LINE_RE);
     if (m) {
-      const nums = (m[1].match(/\d+/g) || []).map((n) =>
-        String(parseInt(n, 10)),
+      const nums = [...m[1].matchAll(ITEM_RE)].map((x) =>
+        x[1] ? `PL${parseInt(x[2], 10)}` : String(parseInt(x[2], 10)),
       );
       if (nums.length) {
         current.lines.push({ nums, time: m[2] ? m[2].replace(/\s/g, "") : "" });
@@ -41,6 +47,11 @@ function parse(text) {
 // Giao việc mở tab cho background.js (popup sẽ bị đóng khi đổi tab)
 function openSongs(nums) {
   chrome.runtime.sendMessage({ type: "openSongs", nums });
+}
+
+// "PL3" -> "PL 3" để dễ đọc, số thường giữ nguyên
+function formatItem(n) {
+  return n.replace(/^PL/, "PL ");
 }
 
 function render(sessions) {
@@ -68,7 +79,7 @@ function render(sessions) {
       const row = document.createElement("div");
       row.className = "line";
       const label = document.createElement("span");
-      label.innerHTML = `<span class="nums">${l.nums.join(" - ")}</span> <span class="time">${l.time}</span>`;
+      label.innerHTML = `<span class="nums">${l.nums.map(formatItem).join(" - ")}</span> <span class="time">${l.time}</span>`;
       const btn = document.createElement("button");
       btn.textContent = `Mở ${l.nums.length} tab`;
       btn.onclick = () => openSongs(l.nums);
