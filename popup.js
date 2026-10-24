@@ -14,6 +14,12 @@ const LINE_RE = new RegExp(
   "iu",
 );
 
+// Dòng tuỳ chọn: "... hát thêm BCM 03 và ..." (chỉ hát khi điểm nhóm trên 10 người)
+const OPTIONAL_RE = new RegExp(
+  String.raw`hát\s*thêm\s*BCM\s*:?\s*(${ITEM}(?:[\s\-–—,;/]+${ITEM})*)`,
+  "iu",
+);
+
 // Tách các dòng "Hát BCM: ..." theo từng buổi (Sáng / Chiều / Tối)
 function parse(text) {
   const sessions = [];
@@ -31,13 +37,18 @@ function parse(text) {
       continue;
     }
 
-    const m = line.match(LINE_RE);
+    const opt = line.match(OPTIONAL_RE);
+    const m = opt || line.match(LINE_RE);
     if (m) {
       const nums = [...m[1].matchAll(ITEM_RE)].map((x) =>
         x[1] ? `PL${parseInt(x[2], 10)}` : String(parseInt(x[2], 10)),
       );
       if (nums.length) {
-        current.lines.push({ nums, time: m[2] ? m[2].replace(/\s/g, "") : "" });
+        current.lines.push({
+          nums,
+          time: !opt && m[2] ? m[2].replace(/\s/g, "") : "",
+          optional: !!opt,
+        });
       }
     }
   }
@@ -71,7 +82,7 @@ function render(sessions) {
     const allBtn = document.createElement("button");
     allBtn.className = "secondary";
     allBtn.textContent = "Mở cả buổi";
-    allBtn.onclick = () => openSongs(s.lines.flatMap((l) => l.nums));
+    allBtn.onclick = () => openSongs(s.lines.filter((l) => !l.optional).flatMap((l) => l.nums));
     head.appendChild(allBtn);
     box.appendChild(head);
 
@@ -79,7 +90,7 @@ function render(sessions) {
       const row = document.createElement("div");
       row.className = "line";
       const label = document.createElement("span");
-      label.innerHTML = `<span class="nums">${l.nums.map(formatItem).join(" - ")}</span> <span class="time">${l.time}</span>`;
+      label.innerHTML = `<span class="nums">${l.nums.map(formatItem).join(" - ")}</span> <span class="time">${l.optional ? "(optional, khi điểm nhóm >10 người)" : l.time}</span>`;
       const btn = document.createElement("button");
       btn.textContent = `Mở ${l.nums.length} tab`;
       btn.onclick = () => openSongs(l.nums);
