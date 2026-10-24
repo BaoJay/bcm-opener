@@ -10,7 +10,7 @@ function grabText() {
 const ITEM = String.raw`(?:(?:PL|ph[uụ]\s*l[uụ]c)\s*)?\d+`;
 const ITEM_RE = /((?:PL|ph[uụ]\s*l[uụ]c)\s*)?(\d+)/giu;
 const LINE_RE = new RegExp(
-  String.raw`Hát\s*BCM\s*:?\s*(${ITEM}(?:[\s\-–—,;/]+${ITEM})*)\s*(\(\s*[\d:]+\s*\))?`,
+  String.raw`Hát\s*BCM\s*:?\s*(?:[^\d\n]{0,80}?)(${ITEM}(?:[\s\-–—,;/]+${ITEM})*)\s*(\(\s*[\d:]+\s*\))?`,
   "iu",
 );
 
