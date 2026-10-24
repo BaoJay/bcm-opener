@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BCM Opener",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Đọc các dòng 'Hát BCM: ...' trong trang hiện tại và mở tab bookvn.net/newsong tương ứng.",
   "permissions": ["activeTab", "scripting"],
   "background": { "service_worker": "background.js" },
