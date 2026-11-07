@@ -1,10 +1,10 @@
 const BASE = "https://bookvn.net/newsong/newsong";
-const APPX_BASE = "https://bookvn.net/newsong/newsong-appx";
+const APPX_BASE = "https://bookvn.net/newsong/newsong-appendix";
 
-// "12" -> .../newsong12 ; "PL3" -> .../newsong-appx003
+// "12" -> .../newsong12 ; "PL3" -> .../newsong-appendix3
 function songUrl(n) {
   const pl = /^PL(\d+)$/.exec(n);
-  return pl ? APPX_BASE + pl[1].padStart(3, "0") : BASE + n;
+  return pl ? APPX_BASE + pl[1] : BASE + n;
 }
 
 // Mở tab ở background (service worker) để không bị dừng khi popup đóng
